@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "VT323", monospace;
+  --font-pixel: "Press Start 2P", system-ui;
+  
+  --color-glitch-cyan: #00ffff;
+  --color-glitch-magenta: #ff00ff;
+  --color-glitch-yellow: #ffff00;
+  --color-bg-void: #0a0a0a;
+}
+
+@layer utilities {
+  .glitch-text {
+    position: relative;
+    text-shadow: 2px 0 var(--color-glitch-cyan), -2px 0 var(--color-glitch-magenta);
+    animation: glitch-skew 1s infinite linear alternate-reverse;
+  }
+
+  .glitch-border {
+    border: 2px solid var(--color-glitch-cyan);
+    box-shadow: 3px 3px 0 var(--color-glitch-magenta), -3px -3px 0 var(--color-glitch-cyan);
+  }
+
+  .crt-overlay {
+    pointer-events: none;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 3px 100%;
+    z-index: 100;
+  }
+
+  .noise-bg {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+  }
+}
+
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-1deg); }
+  40% { transform: skew(1deg); }
+  60% { transform: skew(-0.5deg); }
+  80% { transform: skew(0.5deg); }
+  100% { transform: skew(0deg); }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.scanline {
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0.1;
+  position: absolute;
+  bottom: 100%;
+  animation: scanline 8s linear infinite;
+}
+
+body {
+  @apply bg-bg-void text-glitch-cyan font-sans antialiased;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-glitch-magenta;
+}
